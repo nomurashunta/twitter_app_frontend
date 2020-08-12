@@ -27,14 +27,31 @@ h1 {
   .header
     h1.title 投稿記事
   .content
-    .text 今はまだなにもないが、いつかはある。
+    nuxt-link.post(to="/post") 投稿する
+    ArticleList(:articles="$store.state.article.articles")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
+import ArticleList from '@/components/pages/index/articleList.vue';
 
-@Component
-export default class IndexPage extends Vue {}
+@Component({
+  components: {
+    ArticleList,
+  },
+})
+export default class IndexPage extends Vue {
+  async mounted() {
+    try {
+      await this.$store.dispatch('article/fetchArticles');
+    } catch (err) {
+      this.$nuxt.error({
+        message: `記事一覧取得時にエラーが発生しました: ${err.message}`,
+        path: this.$route.path,
+      });
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -50,6 +67,15 @@ export default class IndexPage extends Vue {}
 
   & > .content > .text {
     font-size: 16px;
+  }
+
+  & > .content > .post {
+    color: black;
+    text-decoration: none;
+  }
+
+  & > .content > .post:hover {
+    opacity: 0.5;
   }
 }
 </style>

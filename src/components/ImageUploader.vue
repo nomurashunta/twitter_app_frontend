@@ -2,7 +2,7 @@
   <div>
     <v-container>
       <v-row justify="center" align="center" class="ma-4">
-        <img :src="previewImage" width="80%" class="uploading-image" >
+        <img :src="previewImage" width="80%" class="uploading-image" />
       </v-row>
       <v-row justify="center" align="center">
         <v-file-input

@@ -1,0 +1,10 @@
+.git
+.nuxt
+.vscode
+node_modules
+.editorconfig
+.gitignore
+docker-compose.env
+docker-compose.yml
+Dockerfile
+README.md
