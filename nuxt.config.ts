@@ -13,7 +13,8 @@ const {
   // 本番では、AWS ECS → process.env に値が渡ってきて上書きされる
   // デフォルト値は開発用
   envName = 'local',
-  apiEndpointUrl = 'https://crudcrud.com/api/356f8bc5acb84ae584ae5642b7ba23ba',
+  // apiEndpointUrl = 'https://crudcrud.com/api/356f8bc5acb84ae584ae5642b7ba23ba',
+  apiEndpointUrl = 'http://localhost:8090/api',
 
   // apiEndpointUrl = 'https://localhost:5555/api', // mock server
 } = process.env;
@@ -43,10 +44,21 @@ const config: Configuration = {
       productionTip: false,
     },
   },
+  // modules: ['@nuxtjs/axios', '@nuxtjs/proxy'],
   modules: ['@nuxtjs/axios'],
   axios: {
     baseURL: apiEndpointUrl,
+    // proxy: true,
   },
+
+  plugins: [{ src: '~/plugins/localStorage.js', ssr: false }],
+
+  // proxy: {
+  //   '/api/': {
+  //     target: 'localhost:8080',
+  //     pathRewrite: { '^/api/': '' },
+  //   },
+  // },
   // 環境変数
   env: {
     // process.env から分割代入で取得したもの

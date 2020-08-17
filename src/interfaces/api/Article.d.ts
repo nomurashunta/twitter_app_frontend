@@ -16,3 +16,8 @@ export interface IArticle {
   body: string;
   timestamp: string;
 }
+
+export interface IToken {
+  token: string;
+  tokenSecret: string;
+}

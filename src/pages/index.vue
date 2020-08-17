@@ -29,6 +29,20 @@ h1 {
   .content
     nuxt-link.post(to="/post") 投稿する
     ArticleList(:articles="$store.state.article.articles")
+  .console
+    nuxt-link.get(to="/redirect") ログイン!!!
+
+  .h1.title {{$store.state.token}}
+
+
+  .h1.title {{$store.state.aaa}}
+
+  .h1.title {{ddouble}}
+
+  .h1.title 以下はトークンです。
+
+  .h1.title {{token}}
+
 </template>
 
 <script lang="ts">
@@ -42,14 +56,22 @@ import ArticleList from '@/components/pages/index/articleList.vue';
 })
 export default class IndexPage extends Vue {
   async mounted() {
-    try {
-      await this.$store.dispatch('article/fetchArticles');
-    } catch (err) {
-      this.$nuxt.error({
-        message: `記事一覧取得時にエラーが発生しました: ${err.message}`,
-        path: this.$route.path,
-      });
-    }
+    // try {
+    //   await this.$store.dispatch('article/fetchArticles');
+    // } catch (err) {
+    //   this.$nuxt.error({
+    //     message: `記事一覧取得時にエラーが発生しました: ${err.message}`,
+    //     path: this.$route.path,
+    //   });
+    // }
+  }
+
+  get ddouble(): string {
+    return this.$store.getters['article/getA']();
+  }
+
+  get token(): string {
+    return this.$store.getters['article/getToken']();
   }
 }
 </script>

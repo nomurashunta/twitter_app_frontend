@@ -17,8 +17,7 @@
     "nuxt": "^2.12.2",
     "nuxt-property-decorator": "^2.7.2",
     "reset-css": "^5.0.1",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^1.0.0",

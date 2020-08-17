@@ -10,6 +10,7 @@ div
     button.button(@click="handleCancel") Cancel
     button.button(@click="handleSubmit") Submit
     button.button(@click="handleTest") 絶対に押すな！！！
+    button.button(@click="handleLogin") ここを押すとログイン
 </template>
 
 <script lang="ts">
@@ -48,6 +49,10 @@ export default class PostPage extends Vue {
 
   public handleCancel() {
     this.$router.push('/');
+  }
+
+  public handleLogin() {
+    this.$store.dispatch('article/getUrl');
   }
 
   public handleTest() {
