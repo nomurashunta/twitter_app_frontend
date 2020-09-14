@@ -17,10 +17,11 @@ export default class ClassAAA extends Vue {
       .then((data) => {
         // store.commitだとうまくいかない
         // store.commit('setToken', data);
+        document.cookie = `token=${data.token}`;
+        document.cookie = `secret=${data.tokenSecret}`;
+        console.log('data:');
         console.log(data);
-        console.log("dadadadadadadadadaaaaaaaaaaaaaaaaaaaaa");
         console.log(data.token);
-        console.log("dasdasds");
         store.dispatch('article/saveToken', { token: data.token, tokenSecret: data.tokenSecret });
         return { twitterAuthUrl: data.authorizationURL };
       })

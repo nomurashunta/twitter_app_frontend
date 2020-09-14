@@ -45,7 +45,7 @@ const config: Configuration = {
     },
   },
   // modules: ['@nuxtjs/axios', '@nuxtjs/proxy'],
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', ['cookie-universal-nuxt', { parseJSON: false }]],
   axios: {
     baseURL: apiEndpointUrl,
     // proxy: true,

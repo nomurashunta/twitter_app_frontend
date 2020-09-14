@@ -2,6 +2,7 @@
   <div>
     <p v-if="attempting">
       Twitterでログインしています。
+      <!--      {{ document.cookie }}-->
       {{ $store.state.token }}
       {{ hyper }}
     </p>
@@ -48,6 +49,7 @@ export default {
     hyper() {
       // console.log('imakaraareyaru!!!!');
       const value2 = this.$store.getters['article/getToken']();
+
       // token = value2;
       // tokenSecret = value2.tokenSecret;
       // console.log(value2.tokenSecret);

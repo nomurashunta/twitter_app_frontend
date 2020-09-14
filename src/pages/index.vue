@@ -23,6 +23,7 @@ h1 {
 -->
 
 <template lang="pug">
+
 .index-page
   .header
     h1.title 投稿記事
@@ -34,7 +35,6 @@ h1 {
 
   .h1.title {{$store.state.token}}
 
-
   .h1.title {{$store.state.aaa}}
 
   .h1.title {{ddouble}}
@@ -44,6 +44,38 @@ h1 {
   .h1.title {{token}}
 
 </template>
+
+<!--<template>-->
+<!--  <div>-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" />-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" />-->
+<!--    <p v-if="attempting">-->
+<!--      Twitterでログインしています。-->
+<!--      &lt;!&ndash;      {{ tokenByCookie }}&ndash;&gt;-->
+<!--      &lt;!&ndash;      {{ document.cookie }}&ndash;&gt;-->
+
+<!--      &lt;!&ndash;      {{ hyper }}&ndash;&gt;-->
+<!--    </p>-->
+<!--    <p v-else>-->
+<!--      Twitterでのログインに失敗しました。-->
+<!--      &lt;!&ndash;      {{ tokenByCookie }}&ndash;&gt;-->
+<!--    </p>-->
+<!--    <no-ssr placeholder="Loading...">-->
+<!--      <p>-->
+<!--        {{ $store.state.token }}-->
+<!--        {{ aaa }}-->
+<!--      </p>-->
+<!--      &lt;!&ndash;      <vue-previewer :images="imgs" :options="{}" />&ndash;&gt;-->
+<!--    </no-ssr>-->
+<!--    &lt;!&ndash;-->
+<!--    <template v-else>-->
+<!--      <p v-else>-->
+<!--        Twitterでのログインに失敗しました。-->
+<!--      </p>-->
+<!--      <p>{{ failedMessage }}</p>-->
+<!--    </template> &ndash;&gt;-->
+<!--  </div>-->
+<!--</template>-->
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
@@ -55,6 +87,18 @@ import ArticleList from '@/components/pages/index/articleList.vue';
   },
 })
 export default class IndexPage extends Vue {
+  created() {
+    const setCached = {
+      title: 'こんにちは！タイトルをキャッシュします',
+      content: 'こんにちは！内容をキャッシュします。',
+    };
+    this.$cookies.set('article01', setCached, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    });
+  }
+
+  //
   async mounted() {
     // try {
     //   await this.$store.dispatch('article/fetchArticles');
@@ -64,6 +108,25 @@ export default class IndexPage extends Vue {
     //     path: this.$route.path,
     //   });
     // }
+    const cookies = document.cookie; // 全てのcookieを取り出して
+    const cookiesArray = cookies.split(';'); // ;で分割し配列に
+
+    for (const c of cookiesArray) {
+      // 一つ一つ取り出して
+      const cArray = c.split('='); // さらに=で分割して配列に
+      console.log(cArray);
+      if (cArray[0] === 'token') {
+        // 取り出したいkeyと合致したら
+      }
+    }
+  }
+
+  get attempting(): boolean {
+    return false;
+  }
+
+  get hasLogined(): boolean {
+    const aa = document.cookie.split(';');
   }
 
   get ddouble(): string {
@@ -73,6 +136,27 @@ export default class IndexPage extends Vue {
   get token(): string {
     return this.$store.getters['article/getToken']();
   }
+
+  get aaa() {
+    return this.$cookies.get('article01');
+  }
+
+  get tokenByCookie() {
+    return '';
+  }
+  // get tokenByCookie() {
+  //   const cookies = document.cookie; // 全てのcookieを取り出して
+  //   const cookiesArray = cookies.split(';'); // ;で分割し配列に
+  //
+  //   for (const c of cookiesArray) {
+  //     // 一つ一つ取り出して
+  //     const cArray = c.split('='); // さらに=で分割して配列に
+  //     if (cArray[0] === 'token') {
+  //       // 取り出したいkeyと合致したら
+  //       return cArray;
+  //     }
+  //   }
+  // }
 }
 </script>
 
