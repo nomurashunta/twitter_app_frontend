@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  h1.title Twitterへリダイレクトしています
+  h1.title Twitterへリダイレクトしています!!!
   button.button(@click="handleCancel") Cancel
 </template>
 
@@ -23,6 +23,7 @@ export default class ClassAAA extends Vue {
         console.log(data);
         console.log(data.token);
         store.dispatch('article/saveToken', { token: data.token, tokenSecret: data.tokenSecret });
+        // return { twitterAuthUrl: data.authenticationURL };
         return { twitterAuthUrl: data.authorizationURL };
       })
       .catch((e) => error({ message: e.message, statusCode: e.statusCode }));

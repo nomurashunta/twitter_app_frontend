@@ -25,7 +25,7 @@ const config: Configuration = {
   // ソースディレクトリ
   srcDir: 'src',
   // ビルド時にのみ使用するモジュール
-  buildModules: ['@nuxt/typescript-build'],
+  buildModules: ['@nuxt/typescript-build', '@nuxtjs/vuetify'],
   // headの設定
   head: {
     meta: [

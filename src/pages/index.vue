@@ -1,187 +1,109 @@
-<!--
-<template lang="pug">
-  h1 Hello World.
+<template>
+  <div>
+    <br>
+    <br>
+    <div v-if="isLoggedIn">
+      <div>
+        <v-container>
+          <v-col>
+            <template v-for="tweet in getTweets">
+              <v-card class="mx-auto" max-width="350">
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <img :src="tweet.profileImageURL">
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title v-html="tweet.name" />
+                    <v-list-item-subtitle v-html="tweet.screenName" />
+                  </v-list-item-content>
+                  <v-list-item-icon>
+                    <v-btn icon>
+                      <v-icon>mdi-dots-horizontal</v-icon>
+                    </v-btn>
+                  </v-list-item-icon>
+                </v-list-item>
+                <v-divider />
+                <v-card-text>
+                  <p>
+                    {{ tweet.text }}
+                  </p>
+                  <p v-if="tweet.mediaEntities" />
+                  <div v-for="image in tweet.mediaEntities">
+                    <!--              {{ image }}-->
+                    <v-img :src="image.mediaURL" />
+                  </div>
+                  </p>
+                </v-card-text>
+                <v-card-actions>
+                  <v-card-text>
+                    感情分析スコア : {{ tweet.sentimentScore }}
+                  </v-card-text>
+                  <v-spacer />
+                  <v-btn icon>
+                    <v-icon>mdi-heart</v-icon>
+                  </v-btn>
+                  <v-btn icon>
+                    <v-icon>mdi-share-variant</v-icon>
+                  </v-btn>
+                </v-card-actions>
+                <v-spacer />
+              </v-card>
+              <br>
+            </template>
+          </v-col>
+        </v-container>
+      </div>
+    </div>
+    <div v-else>
+      <p>
+        開始するにはログインしてください。
+      </p>
+      <v-btn depressed elevation="2" @click="login">
+        ログイン
+      </v-btn>
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator';
+<script>
+import { mapMutations } from 'vuex';
 
-// 環境変数の参照サンプル
-console.log('process.env.envName:', process.env.envName);
-console.log('process.env.apiEndpointUrl:', process.env.apiEndpointUrl);
-
-@Component
-export default class IndexPage extends Vue {}
-</script>
-
-<style lang="scss" scoped>
-h1 {
-  color: #000;
-  background-color: #fff;
-}
-</style>
--->
-
-<template lang="pug">
-
-.index-page
-  .header
-    h1.title 投稿記事
-  .content
-    nuxt-link.post(to="/post") 投稿する
-    ArticleList(:articles="$store.state.article.articles")
-  .console
-    nuxt-link.get(to="/redirect") ログイン!!!
-
-  .h1.title {{$store.state.token}}
-
-  .h1.title {{$store.state.aaa}}
-
-  .h1.title {{ddouble}}
-
-  .h1.title 以下はトークンです。
-
-  .h1.title {{token}}
-
-</template>
-
-<!--<template>-->
-<!--  <div>-->
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" />-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" />-->
-<!--    <p v-if="attempting">-->
-<!--      Twitterでログインしています。-->
-<!--      &lt;!&ndash;      {{ tokenByCookie }}&ndash;&gt;-->
-<!--      &lt;!&ndash;      {{ document.cookie }}&ndash;&gt;-->
-
-<!--      &lt;!&ndash;      {{ hyper }}&ndash;&gt;-->
-<!--    </p>-->
-<!--    <p v-else>-->
-<!--      Twitterでのログインに失敗しました。-->
-<!--      &lt;!&ndash;      {{ tokenByCookie }}&ndash;&gt;-->
-<!--    </p>-->
-<!--    <no-ssr placeholder="Loading...">-->
-<!--      <p>-->
-<!--        {{ $store.state.token }}-->
-<!--        {{ aaa }}-->
-<!--      </p>-->
-<!--      &lt;!&ndash;      <vue-previewer :images="imgs" :options="{}" />&ndash;&gt;-->
-<!--    </no-ssr>-->
-<!--    &lt;!&ndash;-->
-<!--    <template v-else>-->
-<!--      <p v-else>-->
-<!--        Twitterでのログインに失敗しました。-->
-<!--      </p>-->
-<!--      <p>{{ failedMessage }}</p>-->
-<!--    </template> &ndash;&gt;-->
-<!--  </div>-->
-<!--</template>-->
-
-<script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator';
-import ArticleList from '@/components/pages/index/articleList.vue';
-
-@Component({
-  components: {
-    ArticleList,
-  },
-})
-export default class IndexPage extends Vue {
-  created() {
-    const setCached = {
-      title: 'こんにちは！タイトルをキャッシュします',
-      content: 'こんにちは！内容をキャッシュします。',
+export default {
+  data() {
+    return {
+      tweets: [],
+      // ダミー用
+      tokens: {
+        token: null,
+        tokenSecret: null,
+      },
     };
-    this.$cookies.set('article01', setCached, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7,
-    });
-  }
+  },
 
-  //
-  async mounted() {
-    // try {
-    //   await this.$store.dispatch('article/fetchArticles');
-    // } catch (err) {
-    //   this.$nuxt.error({
-    //     message: `記事一覧取得時にエラーが発生しました: ${err.message}`,
-    //     path: this.$route.path,
-    //   });
-    // }
-    const cookies = document.cookie; // 全てのcookieを取り出して
-    const cookiesArray = cookies.split(';'); // ;で分割し配列に
-
-    for (const c of cookiesArray) {
-      // 一つ一つ取り出して
-      const cArray = c.split('='); // さらに=で分割して配列に
-      console.log(cArray);
-      if (cArray[0] === 'token') {
-        // 取り出したいkeyと合致したら
+  computed: {
+    token() {
+      return this.$store.getters['article/getToken']().token;
+    },
+    tokenSecret() {
+      return this.$store.getters['article/getToken']().tokenSecret;
+    },
+    isLoggedIn() {
+      return this.token && this.tokenSecret;
+    },
+    getTweets() {
+      if (this.isLoggedIn) {
+        this.$axios
+          .get(`/getJudgedTimeLine?token=${this.token}&token_secret=${this.tokenSecret}`)
+          .then((response) => this.tweets = response.data.filter(t => t.sentimentScore > -0.5))
       }
+      console.log(this.tweets)
+      return this.tweets
     }
-  }
-
-  get attempting(): boolean {
-    return false;
-  }
-
-  get hasLogined(): boolean {
-    const aa = document.cookie.split(';');
-  }
-
-  get ddouble(): string {
-    return this.$store.getters['article/getA']();
-  }
-
-  get token(): string {
-    return this.$store.getters['article/getToken']();
-  }
-
-  get aaa() {
-    return this.$cookies.get('article01');
-  }
-
-  get tokenByCookie() {
-    return '';
-  }
-  // get tokenByCookie() {
-  //   const cookies = document.cookie; // 全てのcookieを取り出して
-  //   const cookiesArray = cookies.split(';'); // ;で分割し配列に
-  //
-  //   for (const c of cookiesArray) {
-  //     // 一つ一つ取り出して
-  //     const cArray = c.split('='); // さらに=で分割して配列に
-  //     if (cArray[0] === 'token') {
-  //       // 取り出したいkeyと合致したら
-  //       return cArray;
-  //     }
-  //   }
-  // }
-}
+  },
+  methods: {
+    login() {
+      window.location.href = 'http://localhost:8090/login';
+    },
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-.index-page {
-  & > .header {
-    margin-bottom: 30px;
-  }
-
-  & > .header > .title {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  & > .content > .text {
-    font-size: 16px;
-  }
-
-  & > .content > .post {
-    color: black;
-    text-decoration: none;
-  }
-
-  & > .content > .post:hover {
-    opacity: 0.5;
-  }
-}
-</style>

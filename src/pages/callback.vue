@@ -5,11 +5,16 @@
       <!--      {{ document.cookie }}-->
       {{ $store.state.token }}
       {{ hyper }}
+      <!--      {{ $route.query.oauth_verifier }}-->
+      tweet!!
+      {{ tweet }}
     </p>
     <p v-else>
       Twitterでのログインに失敗しました。
       {{ failedMessage }}
     </p>
+    <v-input />
+
     <!--
     <template v-else>
       <p v-else>
@@ -29,6 +34,9 @@ export default {
   data() {
     return {
       failedMessage: null,
+      info: null,
+      info2: null,
+      tweet: null,
       tokens: {
         token: null,
         tokenSecret: null,
@@ -40,24 +48,22 @@ export default {
     attempting() {
       return !this.failedMessage;
     },
-    // get() {
-    //   const value2 = this.$store.getters['article/getToken']();
-    //   console.log(value2);
-    //   console.log('----------');
-    //   return value2;
-    // },
     hyper() {
-      // console.log('imakaraareyaru!!!!');
       const value2 = this.$store.getters['article/getToken']();
-
-      // token = value2;
-      // tokenSecret = value2.tokenSecret;
-      // console.log(value2.tokenSecret);
       return value2;
     },
-    hype3() {
+    token() {
+      const value3 = this.$store.getters['article/getToken']();
+      return value3.token;
+    },
+    tokenSecret() {
       const value3 = this.$store.getters['article/getToken']();
       return value3.tokenSecret;
+    },
+    getA() {
+      const value2 = this.$store.getters['article/getToken']();
+      const ddd = this.$route.query.id;
+      return ``;
     },
   },
 
@@ -83,78 +89,17 @@ export default {
     // },
   },
 
-  async mounted() {
-    try {
-      // const pa = {
-      //   oauthToken: this.$route.query.oauth_token,
-      //   oauthVerifier: this.$route.query.oauth_verifier,
-      //   token: this.hyper.token,
-      //   tokenSecret: this.hyper.tokenSecret,
-      // };
-      // console.log(pa);
-      // const callbackData = await this.$axios.$get('/callback3', {
-      //   params: pa,
-      // });
-      // console.log('sadsadasdasdasdasda');
-      // console.log(callbackData);
-      // console.log('dsadsdaaaaadsad');
-      // const pa = {
-      //   oauth_token: this.$route.query.oauth_token,
-      //   oauth_verifier: this.$route.query.oauth_verifier,
-      // };
-
-      console.log('hype1111111111111111111111111');
-
-      console.log(this.hype3);
-
-      // this.$store.dispatch('article/getAccessToken', {
-      //   oauth_token: this.$route.query.oauth_token,
-      //   oauthVerifier: this.$route.query.oauth_verifier,
-      // });
-    } catch (e) {
-      console.log(e);
-    }
+  mounted() {
+    // this.$axios
+    //   .get(
+    //     `/getHome?token=${this.token}&token=secret=${this.tokenSecret}
+    //     &oauth_verifier=${this.$route.query.oauth_verifier}`
+    //   )
+    //   .then((response) => (this.info = response.data));
+    this.$axios.get(`/getHome`).then((response) => (this.info2 = response.data));
+    this.$axios
+      .get(`/getTimeLine?token=${this.token}&token_secret=${this.tokenSecret}`)
+      .then((response) => (this.tweet = response.data));
   },
-
-  // async fetch() {
-  //   const token = this.$store.getters['article/getTk']();
-  //   console.log(token);
-  // },
-
-  // async mounted() {
-  //   try {
-  //     console.log(this.$route.query);
-  //     const token = await this.$store.getters['article/getTk']();
-  //     console.log('sdasdasdasdasdas');
-  //     console.log(token.oauth_verifier);
-  //     console.log(token.oauth_token);
-  //     console.log('sdasdasdasdasdas');
-  //     // const callbackData = await this.$axios.$get('/callback2', { params: this.$route.query, token });
-  //     // const callbackData = await this.$axios.$post('/callback3', { params: this.$route.query, data: token });
-
-  //     const pa = {
-  //       oauth_token: this.$route.query.oauth_token,
-  //       oauth_verifier: this.$route.query.oauth_verifier,
-  //       token: parsedobj.token,
-  //       token_secret: parsedobj.token_secret,
-  //     };
-
-  //     console.log(pa);
-
-  //     //const callbackData = await this.$axios.$get('/getT2');
-  //     const callbackData = await this.$axios.$get('/callback3', {
-  //       params: pa,
-  //     });
-
-  //     // const callbackData = await this.$axios.$get('/callback3', { params: this.$route.query });
-
-  //     console.log(callbackData);
-  //     // this.setToken({ token: callbackData.access_token });
-  //     // this.setUser({ user: callbackData.user });
-  //     // this.$router.replace('/');
-  //   } catch (error) {
-  //     this.failedMessage = error.message;
-  //   }
-  // },
 };
 </script>
